@@ -3,18 +3,25 @@ import Puhelinluettelo from './components/Puhelinluettelo'
 import Filtteri from './components/Filtteri'
 import Lisayslomake from './components/Lisayslomake';
 
+import axios from 'axios'
+
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      persons: [
-        { name: 'Arto Hellas',
-          number: '0401234567' }
-      ],
+      persons: [],
       newName: '',
       newNumber: '',
       filter: ''
     }
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:3001/persons').then( response => {
+      this.setState({
+        persons: response.data
+      })
+    })
   }
 
   handleNameChange = event => {
