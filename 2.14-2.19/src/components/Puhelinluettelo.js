@@ -10,7 +10,7 @@ const Puhelinluettelo = (props) => {
     })
 
   const persons = filteredPersons.map( person => {
-    return <Person key={person.name} person={person} />
+    return <Person key={person.name} person={person} handleRemove={props.handleRemove} />
   })
 
   return (
@@ -23,7 +23,8 @@ const Puhelinluettelo = (props) => {
 const Person = (props) => {
   return (
     <li>
-      {props.person.name} {props.person.number}
+      {props.person.name} {props.person.number} 
+      <button onClick={props.handleRemove(props.person.id)}>poista</button>
     </li>
   )
 }

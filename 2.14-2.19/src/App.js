@@ -62,6 +62,20 @@ class App extends React.Component {
     })
   }
 
+  handleRemove = id => {
+    return () => {
+      if(!window.confirm('Oletko varma')) {
+        return
+      }
+
+      personService.remove(id).then( data => {
+        this.setState({
+          persons: this.state.persons.filter(person => person.id !== id)
+        })
+      })
+    }
+  }
+
   render() {
     return (
       <div>
@@ -83,7 +97,10 @@ class App extends React.Component {
 
         <h2>Numerot</h2>
         
-        <Puhelinluettelo persons={this.state.persons} filter={this.state.filter} />
+        <Puhelinluettelo 
+          persons={this.state.persons}
+          filter={this.state.filter}
+          handleRemove={this.handleRemove} />
       </div>
     )
   }
