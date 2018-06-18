@@ -14,7 +14,7 @@ const Puhelinluettelo = (props) => {
 const Person = (props) => {
   return (
     <li>
-      {props.person.name}
+      {props.person.name} {props.person.number}
     </li>
   )
 }
@@ -24,9 +24,11 @@ class App extends React.Component {
     super(props)
     this.state = {
       persons: [
-        { name: 'Arto Hellas' }
+        { name: 'Arto Hellas',
+          number: '0401234567' }
       ],
-      newName: ''
+      newName: '',
+      newNumber: ''
     }
   }
 
@@ -36,17 +38,24 @@ class App extends React.Component {
     })
   }
 
+  handleNumberChange = event => {
+    this.setState({
+      newNumber: event.target.value
+    })
+  }
+
   handleSubmit = event => {
     event.preventDefault()
-
-    const newPerson = {
-      name: this.state.newName
-    }
     
     const nameFound = this.state.persons.find( 
       person => person.name === this.state.newName)
 
     if(nameFound) return
+
+    const newPerson = {
+      name: this.state.newName,
+      number: this.state.newNumber
+    }
 
     const persons = this.state.persons.concat(newPerson)
 
@@ -65,6 +74,11 @@ class App extends React.Component {
             <input
               onChange={this.handleNameChange}
               value={this.state.newName} />
+            <br />
+            numero:
+            <input
+              onChange={this.handleNumberChange}
+              value={this.state.newNumber} />
           </div>
           <div>
             <button type="submit">lisää</button>
