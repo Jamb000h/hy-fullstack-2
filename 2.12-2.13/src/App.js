@@ -25,14 +25,26 @@ class App extends React.Component {
     })
   }
 
+  handleClick = filter => {
+    this.setState({
+      filter
+    })
+  }
+
   render() {
 
     const filteredCountries = this.state.countries.filter( country => {
-      return country.name.toLowerCase().indexOf(this.state.filter) > -1
+      return country.name.toLowerCase().indexOf(this.state.filter.toLowerCase()) > -1
     })
 
     const countries = filteredCountries.map( country => {
-      return <li key={country.name}>{country.name}</li>
+      return (
+        <li 
+          key={country.name}
+          onClick={() => this.handleClick(country.name)}>
+          {country.name}
+        </li>
+      )
     })
 
     return (
