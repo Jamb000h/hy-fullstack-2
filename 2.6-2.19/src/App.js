@@ -1,12 +1,21 @@
 import React from 'react';
 
 const Puhelinluettelo = (props) => {
-  const persons = props.persons.map( (person, i) => {
+
+  const filteredPersons =
+    props.filter === '' ? 
+    props.persons :
+    props.persons.filter( person => {
+      return person.name.toLowerCase().indexOf(props.filter.toLowerCase(), 0) > -1
+    })
+
+  const persons = filteredPersons.map( person => {
     return <Person key={person.name} person={person} />
   })
+
   return (
     <ul>
-      {persons}
+      { persons }
     </ul>
   )
 }
@@ -28,7 +37,8 @@ class App extends React.Component {
           number: '0401234567' }
       ],
       newName: '',
-      newNumber: ''
+      newNumber: '',
+      filter: ''
     }
   }
 
@@ -41,6 +51,12 @@ class App extends React.Component {
   handleNumberChange = event => {
     this.setState({
       newNumber: event.target.value
+    })
+  }
+
+  handleFilterChange = event => {
+    this.setState({
+      filter: event.target.value
     })
   }
 
@@ -67,7 +83,12 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h2>Puhelinluettelo</h2>
+        <h1>Puhelinluettelo</h1>
+        rajaa näytettäviä:
+        <input
+          onChange={this.handleFilterChange}
+          value={this.state.filter} />
+        <h2>Lisää uusi</h2>
         <form onSubmit={this.handleSubmit} >
           <div>
             nimi:
@@ -85,7 +106,7 @@ class App extends React.Component {
           </div>
         </form>
         <h2>Numerot</h2>
-        <Puhelinluettelo persons={this.state.persons} />
+        <Puhelinluettelo persons={this.state.persons} filter={this.state.filter} />
       </div>
     )
   }
