@@ -45,10 +45,26 @@ class App extends React.Component {
   handleSubmit = event => {
     event.preventDefault()
     
-    const nameFound = this.state.persons.find( 
+    const person = this.state.persons.find( 
       person => person.name === this.state.newName)
 
-    if(nameFound) return
+    if(person) {
+      if(window.confirm(`${person.name} on jo luettelossa, korvataanko vanha numero uudella?`)) {
+        const updatedPerson = {
+          id: person.id,
+          name: person.name,
+          number: this.state.newNumber
+        }
+
+        personService.update(person.id, updatedPerson).then( data => {
+          this.setState({
+            persons: this.state.persons.map( person => person.id !== data.id ? person : data)
+          })
+        })
+      }
+
+      return
+    }
 
     const newPerson = {
       name: this.state.newName,
