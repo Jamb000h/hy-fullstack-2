@@ -38,9 +38,16 @@ class App extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault()
+
     const newPerson = {
       name: this.state.newName
     }
+    
+    const nameFound = this.state.persons.find( 
+      person => person.name === this.state.newName)
+
+    if(nameFound) return
+
     const persons = this.state.persons.concat(newPerson)
 
     this.setState({
