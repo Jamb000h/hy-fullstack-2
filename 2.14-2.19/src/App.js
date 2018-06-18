@@ -1,9 +1,12 @@
 import React from 'react';
 import Puhelinluettelo from './components/Puhelinluettelo'
 import Filtteri from './components/Filtteri'
-import Lisayslomake from './components/Lisayslomake';
+import Lisayslomake from './components/Lisayslomake'
+import Notifikaatio from './components/Notifikaatio'
 
 import personService from './services/persons'
+
+import './index.css'
 
 class App extends React.Component {
   constructor(props) {
@@ -12,7 +15,12 @@ class App extends React.Component {
       persons: [],
       newName: '',
       newNumber: '',
-      filter: ''
+      filter: '',
+      notification: {
+        show: false,
+        status: '',
+        text: ''
+      }
     }
   }
 
@@ -58,9 +66,25 @@ class App extends React.Component {
 
         personService.update(person.id, updatedPerson).then( data => {
           this.setState({
-            persons: this.state.persons.map( person => person.id !== data.id ? person : data)
+            persons: this.state.persons.map( person => person.id !== data.id ? person : data),
+            notification: {
+              show: true,
+              status: 'success',
+              text: `Henkilön ${data.name} puhelinnumero on päivitetty!`
+            }
           })
         })
+
+        setTimeout(() => {
+          this.setState({
+            notification: {
+              show: false,
+              status: '',
+              text: ''
+            }
+          })
+        }, 5000)
+
       }
 
       return
@@ -73,22 +97,56 @@ class App extends React.Component {
 
     personService.create(newPerson).then( data => {
       this.setState({
-        persons: this.state.persons.concat(data)
+        persons: this.state.persons.concat(data),
+        notification: {
+          show: true,
+          status: 'success',
+          text: `Henkilön ${data.name} lisäys onnistui!`
+        }
       })
+
+      
+      setTimeout(() => {
+        this.setState({
+          notification: {
+            show: false,
+            status: '',
+            text: ''
+          }
+        })
+      }, 5000)
     })
   }
 
   handleRemove = id => {
     return () => {
-      if(!window.confirm('Oletko varma')) {
+
+      const name = this.state.persons.find( person => person.id === id).name
+
+      if(!window.confirm(`Oletko varma että haluat poistaa henkilön ${name}?`)) {
         return
       }
 
       personService.remove(id).then( data => {
         this.setState({
-          persons: this.state.persons.filter(person => person.id !== id)
+          persons: this.state.persons.filter(person => person.id !== id),
+          notification: {
+            show: true,
+            status: 'success',
+            text: `${name} poistettiin onnistuneesti!`
+          }
         })
       })
+
+      setTimeout(() => {
+        this.setState({
+          notification: {
+            show: false,
+            status: '',
+            text: ''
+          }
+        })
+      }, 5000)
     }
   }
 
@@ -96,6 +154,7 @@ class App extends React.Component {
     return (
       <div>
         <h1>Puhelinluettelo</h1>
+        <Notifikaatio notification={this.state.notification} />
         rajaa näytettäviä:
 
         <Filtteri 

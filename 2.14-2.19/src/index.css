@@ -1,0 +1,8 @@
+.notification {
+    margin: 1rem;
+    padding: 1rem;
+}
+
+.success {
+    background-color: lightgreen;
+}
