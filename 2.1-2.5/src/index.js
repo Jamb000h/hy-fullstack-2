@@ -1,70 +1,68 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const Otsikko = (props) => {
-  return (
-    <h1>{props.kurssi.nimi}</h1>
-  );
-}
+import Kurssi from './components/Kurssi'
 
-const Osa = (props) => {
-  return (
-    <p>{props.osa.nimi} {props.osa.tehtavia}</p>
-  );
-}
+const Sisalto = ( props ) => {
 
-const Sisalto = (props) => {
-
-  const osat = props.kurssi.osat.map( (osa, i) => {
-    return <Osa key={i} osa={osa} />;
-  });
+  const kurssit = props.kurssit.map( (kurssi, i) => {
+    return <Kurssi key={i} kurssi={kurssi} />
+  })
 
   return (
     <div>
-      {osat}
+      {kurssit}
     </div>
   );
 }
 
-const Yhteensa = (props) => {
-
-  const yhteensa = props.kurssi.osat.reduce( (yht, osa) => {
-    return yht + osa.tehtavia;
-  }, 0);
-
-  return (
-    <p>yhteensä {yhteensa} tehtävää</p>
-  );
-}
-
 const App = () => {
-  const kurssi = {
-    nimi: 'Half Stack -sovelluskehitys',
-    osat: [
-      {
-        nimi: 'Reactin perusteet',
-        tehtavia: 10
-      },
-      {
-        nimi: 'Tiedonvälitys propseilla',
-        tehtavia: 7
-      },
-      {
-        nimi: 'Komponenttien tila',
-        tehtavia: 14
-      }
-    ]
-  }
+  const kurssit = [
+    {
+      nimi: 'Half Stack -sovelluskehitys',
+      id: 1,
+      osat: [
+        {
+          nimi: 'Reactin perusteet',
+          tehtavia: 10,
+          id: 1
+        },
+        {
+          nimi: 'Tiedonvälitys propseilla',
+          tehtavia: 7,
+          id: 2
+        },
+        {
+          nimi: 'Komponenttien tila',
+          tehtavia: 14,
+          id: 3
+        }
+      ]
+    },
+    {
+      nimi: 'Node.js',
+      id: 2,
+      osat: [
+        {
+          nimi: 'Routing',
+          tehtavia: 3,
+          id: 1
+        },
+        {
+          nimi: 'Middlewaret',
+          tehtavia: 7,
+          id: 2
+        }
+      ]
+    }
+  ]
+  
+
 
   return (
     <div>
-      <Otsikko kurssi={kurssi} />
-      <Sisalto 
-        kurssi={kurssi}
-        />
-      <Yhteensa
-        kurssi={kurssi}
-      />
+      <h1>Opetusohjelma</h1>
+      <Sisalto kurssit={kurssit} />
     </div>
   )
 }
