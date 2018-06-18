@@ -6,3 +6,7 @@
 .success {
     background-color: lightgreen;
 }
+
+.error {
+    background-color: indianred;
+}

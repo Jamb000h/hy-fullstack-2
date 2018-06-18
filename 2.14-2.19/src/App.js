@@ -74,6 +74,16 @@ class App extends React.Component {
             }
           })
         })
+        .catch( data => {
+          this.setState({
+            persons: this.state.persons.filter(oldStatePerson => oldStatePerson.id !== person.id),
+            notification: {
+              show: true,
+              status: 'error',
+              text: `${person.name} numeroa ei voida päivittää koska yhteystieto on poistettu!`
+            }
+          })
+        })
 
         setTimeout(() => {
           this.setState({
@@ -121,9 +131,9 @@ class App extends React.Component {
   handleRemove = id => {
     return () => {
 
-      const name = this.state.persons.find( person => person.id === id).name
+      const personName = this.state.persons.find( person => person.id === id).name
 
-      if(!window.confirm(`Oletko varma että haluat poistaa henkilön ${name}?`)) {
+      if(!window.confirm(`Oletko varma että haluat poistaa henkilön ${personName}?`)) {
         return
       }
 
@@ -133,7 +143,17 @@ class App extends React.Component {
           notification: {
             show: true,
             status: 'success',
-            text: `${name} poistettiin onnistuneesti!`
+            text: `${personName} poistettiin onnistuneesti!`
+          }
+        })
+      })
+      .catch( data => {
+        this.setState({
+          persons: this.state.persons.filter(person => person.id !== id),
+          notification: {
+            show: true,
+            status: 'error',
+            text: `${personName} on jo poistettu!`
           }
         })
       })
